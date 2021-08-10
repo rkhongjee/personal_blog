@@ -36,8 +36,6 @@ headers = {
     "X-RapidAPI-Host": "quotes15.p.rapidapi.com",
 }
 
-response = requests.get(url, headers=headers)
-
 
 ##CONFIGURE TABLES
 class User(UserMixin, db.Model):
@@ -90,6 +88,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def api():
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    return data
+
+
 # That user_id will come from the user session. If they're logged in, they will have it set as their identity.
 # When a request comes in, user loader attempts to load a user object using this identity and check whether the user
 # exists and is active (not blocked). If all goes well the user is considered authenticated and the object user loader
@@ -124,8 +128,9 @@ def inject_now():
 
 @app.route('/')
 def get_all_posts():
+    quote = api()
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
+    return render_template("index.html", all_posts=posts, quote=quote, current_user=current_user)
 
 
 @app.route('/register', methods=["GET", "POST"])
