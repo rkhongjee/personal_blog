@@ -117,11 +117,6 @@ def admin_only(f):
 
 
 @app.context_processor
-def inject_quote():
-    return {"Quote": response.json()}
-
-
-@app.context_processor
 def inject_now():
     return {'now': datetime.utcnow()}
 
