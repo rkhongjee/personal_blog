@@ -11,21 +11,22 @@ from flask_gravatar import Gravatar
 from datetime import datetime
 from functools import wraps
 import requests
+import os
 
 # : Flask-login module is use to do access control.It provides user session management for Flask: logging in,
 # logging out, and remembering session. The module stores the user ID, restricts views to logged in users,
 # protects cookies and has many other features. Install the extension with pip----$ pip install flask-login.
 
-api_key = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = api_key
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False,
                     base_url=None)
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
